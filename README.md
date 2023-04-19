@@ -1,2 +1,2 @@
-# convertisseur-de-monnaie
-convertisseur de monnaie avec le taux de change en temps reél
+# Convertisseur-de-monnaie
+Convertisseur de monnaie avec le taux de change en temps reél
