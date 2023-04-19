@@ -18,7 +18,7 @@ public class ConvertisseurDevises extends JFrame {
     private JComboBox<String> comboBoxDevisesSource;
     private JComboBox<String> comboBoxDevisesCible;
 
-    // Ajoutez votre clé API ici
+    
     private static final String API_KEY = "0YxHxLAn3k89M9C1WVPH5duWOUDns05g";
 
     // Constructeur
@@ -34,8 +34,8 @@ public class ConvertisseurDevises extends JFrame {
         boutonConvertir = new JButton("Convertir");
         labelResultat = new JLabel("Résultat :");
 
-        comboBoxDevisesSource = new JComboBox<>(new String[]{"EUR", "USD", "GBP"});
-        comboBoxDevisesCible = new JComboBox<>(new String[]{"USD", "EUR", "GBP"});
+        comboBoxDevisesSource = new JComboBox<>(new String[]{"EUR", "USD", "GBP", "JPY", "CAD"});
+        comboBoxDevisesCible = new JComboBox<>(new String[]{"USD", "EUR", "GBP", "JPY", "CAD"});
 
         // Ajouter un écouteur d'événements au bouton
         boutonConvertir.addActionListener(new ActionListener() {
@@ -46,7 +46,7 @@ public class ConvertisseurDevises extends JFrame {
                     String deviseCible = (String) comboBoxDevisesCible.getSelectedItem();
 
                     double montantSource = Double.parseDouble(champMontant.getText());
-                    JSONObject tauxDeChange = getTauxDeChange();
+                    JSONObject tauxDeChange = getTauxDeChange(deviseSource);
 
                     if (tauxDeChange.getBoolean("success")) {
                         double taux = tauxDeChange.getJSONObject("quotes").getDouble(deviseSource + deviseCible);
@@ -74,13 +74,12 @@ public class ConvertisseurDevises extends JFrame {
         setVisible(true);
     }
 
-    private JSONObject getTauxDeChange() throws IOException, InterruptedException {
+    private JSONObject getTauxDeChange(String deviseSource) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.apilayer.com/exchangerates_data/live?base=EUR&apikey=" + API_KEY))
+                .uri(URI.create("https://api.apilayer.com/exchangerates_data/live?base=" + deviseSource + "&apikey=" + API_KEY))
                 .build();
 
-        
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return new JSONObject(response.body());
     }
@@ -93,3 +92,5 @@ public class ConvertisseurDevises extends JFrame {
         });
     }
 }
+
+
